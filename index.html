@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Excel to DBC Tool</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="/js/scripts.js"></script>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <div class="navbar">
+    <button class="tab-button active" onclick="openTab('excelToDBC')">Excel to DBC</button>
+    <!-- <button class="tab-button" onclick="openTab('dbcToExcel')">DBC to Excel</button> -->
+    <button class="tab-button" onclick="openTab('history')">History</button>
+    <button class="tab-button" onclick="openTab('about')">About</button>
+  </div>
+
+  <!-- Tab Contents -->
+  <div class="container">
+    <!-- Excel to DBC Tab -->
+    <div id="excelToDBC" class="tab-content active">
+      <h2 style="color: #007bff;">Excel to DBC</h2>
+      <div class="form-group">
+        <label for="excelFile">Excel File</label>
+        <div class="drag-drop" onclick="document.getElementById('fileInput').click()">
+          Drag & Drop your file here or click to select
+          <input type="file" id="fileInput" style="display: none;">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="dbcPrefix">DBC Prefix</label>
+        <input type="text" id="dbcPrefix" placeholder="Enter DBC Prefix, e.g., CAN_Msg">
+      </div>
+      <div class="form-group">
+        <label for="worksheet">Worksheet</label>
+        <div class="checkbox-group" id="worksheetCheckboxes">
+          <label><input type="checkbox" value="Sheet1"> Sheet1</label>
+          <label><input type="checkbox" value="Sheet2"> Sheet2</label>
+          <label><input type="checkbox" value="Sheet3"> Sheet3</label>
+        </div>
+      </div>
+      <div class="form-group generation-controls">
+        <!-- Dropdown for Generation Option -->
+        <div class="generation-option-container">
+          <label for="generationOption">Generation Option</label>
+          <select id="generationOption">
+            <option value="separately">Generate Separately</option>
+            <option value="combined">Generate Combinedly</option>
+          </select>
+        </div>
+        <!-- Checkbox for Generate Value Table -->
+        <div class="value-table-container">
+          <label for="generateValueTable">Generate Value Table</label>
+          <input type="checkbox" id="generateValueTable">
+        </div>
+      </div>
+      <!-- Top Buttons -->
+      <div class="form-group button-group" style="margin-bottom: 20px;">
+        <button id="getTemplateButton">Get Template</button>
+        <button id="generateButton">Generate</button>
+      </div>
+       <!-- Clear Information Button -->
+      <div class="form-group button-group">
+        <button id="clearInfoButton" style="background-color: #dc3545;">Clear Info</button>
+      </div>
+      <!-- Information Prompt Box -->
+      <div class="form-group">
+        <label for="promptBox">Information Prompt</label>
+        <textarea id="promptBox" rows="5" placeholder="Information or logs will appear here..." readonly></textarea>
+      </div>
+    </div>
+
+    <!-- DBC to Excel Tab -->
+    <div id="dbcToExcel" class="tab-content">
+      <h2 style="color: #007bff;">DBC to Excel</h2>
+      <p>Feature under development...</p>
+    </div>
+
+    <!-- History Tab -->
+    <div id="history" class="tab-content">
+      <h2 style="color: #007bff;">History</h2>
+      <div class="timeline">
+        <div class="timeline-item right">
+          <div class="timeline-item-content">
+            <h3>Version 1.0</h3>
+            <p>Improved, Release</p>
+            <time>January 14, 2025</time>
+          </div>
+        </div>
+        <div class="timeline-item left">
+          <div class="timeline-item-content">
+            <h3>Version 0.6</h3>
+            <p>Optimizing Functions and added support valsheet and generate options</p>
+            <time>January 13, 2025</time>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-item-content">
+            <h3>Version 0.5</h3>
+            <p>Function bugs fix.</p>
+            <time>January 12, 2025</time>
+          </div>
+        </div>
+        <div class="timeline-item left">
+          <div class="timeline-item-content">
+            <h3>Version 0.4</h3>
+            <p>Initial release with basic Excel to DBC conversion functionality.</p>
+            <time>January 10, 2025</time>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-item-content">
+            <h3>Version 0.3</h3>
+            <p>Added support for multiple worksheets and improved UI.</p>
+            <time>January 3, 2025</time>
+          </div>
+        </div>
+        <div class="timeline-item left">
+          <div class="timeline-item-content">
+            <h3>Version 0.2</h3>
+            <p>Implemented drag-and-drop file upload and enhanced error handling.</p>
+            <time>January 1, 2025</time>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-item-content">
+            <h3>Version 0.1</h3>
+            <p>First Edition, Simple UI, function</p>
+            <time>December 28, 2024</time>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- About Tab -->
+    <div id="about" class="tab-content">
+      <h2 style="color: #007bff;">About</h2>
+      <p>A practice page, I hope you guys like it</p>
+      <div style="display: flex; gap: 10px; margin-top: 10px;">
+        <img alt="Static Badge" src="https://img.shields.io/badge/HTML-orange?style=flat&logo=html5&logoColor=white&logoSize=auto&color=orange&cacheSeconds=3600">
+        <img alt="Static Badge" src="https://img.shields.io/badge/CSS-yellow?style=flat&logo=css&logoColor=white&logoSize=auto&color=brown&cacheSeconds=3600">
+        <img alt="Static Badge" src="https://img.shields.io/badge/JavaScript-blue?style=flat&logo=javascript&logoColor=white&logoSize=auto&color=yellow&cacheSeconds=3600">
+      </div>
+    </div>
+  </div>
+</body>
+</html>
