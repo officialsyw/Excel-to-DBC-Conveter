@@ -138,7 +138,7 @@ let excelFile = null; // excel file
         formData.append('generateValueTable', generateValueTable);
 
         // Update the API endpoint URL to use relative path
-        const response = await fetch('/api/convert', {
+        const response = await fetch('/api/converter', {
             method: 'POST',
             body: formData
         });
