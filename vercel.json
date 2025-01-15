@@ -3,12 +3,14 @@
   "public": true,
   "builds": [
     { "src": "public/**", "use": "@vercel/static" },
+    { "src": "api/converter.js", "use": "@vercel/node" },
     { "src": "api/*.js", "use": "@vercel/node" },
     { "src": "*.html", "use": "@vercel/static" }
   ],
   "routes": [
     { "src": "/js/(.*)", "dest": "/public/js/$1" },
     { "src": "/css/(.*)", "dest": "/public/css/$1" },
+    { "src": "/api/converter", "dest": "/api/converter.js" },
     { "src": "/api/(.*)", "dest": "/api/$1" },
     { "src": "/(.*)", "dest": "/$1" }
   ]
