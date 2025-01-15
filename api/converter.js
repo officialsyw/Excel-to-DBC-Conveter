@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.static(path.join(__dirname, '../')));
 
-app.post('/api/convert', upload.single('file'), async (req, res) => {
+app.post('/api/converter', upload.single('file'), async (req, res) => {
     try {
         const dbcPrefix = req.body.dbcPrefix || 'CAN_Msg';
         // Parse the JSON string back into an array
