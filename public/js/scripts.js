@@ -174,3 +174,31 @@ let excelFile = null; // excel file
     promptBox.value += message + "\n";
     promptBox.scrollTop = promptBox.scrollHeight; // Scroll to the bottom
   }
+
+  function downloadTemplate() {
+    const templateUrl = 'https://dbctool.shenyanwu.top/template/CANMatrix_Demo.xlsx';
+    const promptBox = document.getElementById('promptBox');
+    
+    fetch(templateUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'template.xlsx';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            promptBox.value = 'Template downloaded successfully!';
+        })
+        .catch(error => {
+            console.error('Error downloading template:', error);
+            promptBox.value = 'Error downloading template. Please try again later.';
+        });
+  }
