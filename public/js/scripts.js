@@ -176,7 +176,8 @@ let excelFile = null; // excel file
   }
 
   function downloadTemplate() {
-    const templateUrl = 'https://dbctool.shenyanwu.top/template/CANMatrix_Demo.xlsx';
+    // Use relative path to access the file from public folder
+    const templateUrl = '/template/CANMatrix_Demo.xlsx';
     const promptBox = document.getElementById('promptBox');
     
     fetch(templateUrl)
@@ -190,7 +191,7 @@ let excelFile = null; // excel file
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'template.xlsx';
+            a.download = 'CANMatrix_Demo.xlsx';
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
@@ -201,4 +202,4 @@ let excelFile = null; // excel file
             console.error('Error downloading template:', error);
             promptBox.value = 'Error downloading template. Please try again later.';
         });
-  }
+}
