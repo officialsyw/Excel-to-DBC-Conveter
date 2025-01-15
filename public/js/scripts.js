@@ -175,31 +175,34 @@ let excelFile = null; // excel file
     promptBox.scrollTop = promptBox.scrollHeight; // Scroll to the bottom
   }
 
-  function downloadTemplate() {
-    // Use relative path to access the file from public folder
-    const templateUrl = '/template/CANMatrix_Demo.xlsx';
-    const promptBox = document.getElementById('promptBox');
+//   function downloadTemplate() {
+//     // Use relative path to access the file from public folder
+//     const templateUrl = '/template/CANMatrix_Demo.xlsx';
+//     const promptBox = document.getElementById('promptBox');
     
-    fetch(templateUrl)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.blob();
-        })
-        .then(blob => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'CANMatrix_Demo.xlsx';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-            promptBox.value = 'Template downloaded successfully!';
-        })
-        .catch(error => {
-            console.error('Error downloading template:', error);
-            promptBox.value = 'Error downloading template. Please try again later.';
-        });
-}
+//     fetch(templateUrl)
+//         .then(response => {
+//             if (!response.ok) {
+//                 throw new Error('Network response was not ok');
+//             }
+//             return response.blob();
+//         })
+//         .then(blob => {
+//             const url = window.URL.createObjectURL(blob);
+//             const a = document.createElement('a');
+//             a.href = url;
+//             a.download = 'CANMatrix_Demo.xlsx';
+//             document.body.appendChild(a);
+//             a.click();
+//             window.URL.revokeObjectURL(url);
+//             document.body.removeChild(a);
+//             promptBox.value = 'Template downloaded successfully!';
+//         })
+//         .catch(error => {
+//             console.error('Error downloading template:', error);
+//             promptBox.value = 'Error downloading template. Please try again later.';
+//         });
+// }
+  function downloadTemplate() {
+    window.open('https://www.dropbox.com/t/hXrX5iAJLEXQajcW', '_blank');
+  }
