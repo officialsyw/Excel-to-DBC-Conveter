@@ -31,18 +31,18 @@ Deploy instantly on Vercel with just one click:
    ```
 2. **Install Dependencies**:
 
-Make sure Node.js and npm are installed on your system. Then run:
+   Make sure Node.js and npm are installed on your system. Then run:
 
    ```bash
    npm install
    ```
-3.**Install Vercel CLI (if not already installed)**:
-
+3. **Install Vercel CLI (if not already installed)**:
+   
    ```bash
    npm i -g vercel
    ```
 
-4.**Run the App Locally**:
+4. **Run the App Locally**:
 
    ```bash
    vercel dev
@@ -75,9 +75,13 @@ Happy coding! 😊
 Contributions are welcome!
 
 Fork the repository.
+
 Create a feature branch: `git checkout -b feature-name`.
+
 Commit your changes: `git commit -m 'Add some feature'`.
+
 Push to the branch: `git push origin feature-name`.
+
 Create a pull request.
 
 ## 📝 License
