@@ -17,7 +17,7 @@ This project is built using **HTML**, **CSS**, **JavaScript**, and **Node.js** w
 ### Option 1: One-Click Deploy  
 Deploy instantly on Vercel with just one click:  
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/officialsyw/dbc_converter_express&project-name=excel-dbc-converter&repository-name=dbc-converter-express)  
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/officialsyw/Excel-to-DBC-Conveter&project-name=Excel-to-DBC-Conveter&repository-name=Excel-to-DBC-Conveter)  
 
 ---
 
