@@ -3,6 +3,11 @@
 A simple yet powerful Node.js + Vercel-based tool to convert Excel files to DBC files.  
 This project is built using **HTML**, **CSS**, **JavaScript**, and **Node.js** with **Express**, deployed seamlessly on **Vercel**. Perfect for learning and practicing full-stack development! 🎉  
 
+> \[!TIP]
+>
+> Check out [documentation](https://officialsyw.github.io/Excel-to-DBC-Conveter/) for more information.
+ 
+
 ---
 
 ## 🌟 Features  
@@ -26,8 +31,8 @@ Deploy instantly on Vercel with just one click:
 1. **Clone the Repository**:  
 
    ```bash
-   git clone https://github.com/officialsyw/dbc_converter_express
-   cd dbc_converter_express
+   git clone https://github.com/officialsyw/Excel-to-DBC-Conveter
+   cd Excel-to-DBC-Conveter
    ```
 2. **Install Dependencies**:
 
@@ -67,7 +72,7 @@ Deploy instantly on Vercel with just one click:
 
 Try the live demo on Vercel: [Live Demo](https://dbctool.shenyanwu.top/)
 
-💡 Tip: For more information on deploying with Vercel, check out their official [documentation](https://officialsyw.github.io/dbc_converter_express/).
+💡 Tip: For more information on deploying with Vercel, check out their official [documentation](https://vercel.com/docs).
 Happy coding! 😊
 
 ## 🤝 Contributing

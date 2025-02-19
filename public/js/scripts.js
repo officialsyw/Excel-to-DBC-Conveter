@@ -175,6 +175,16 @@ let excelFile = null; // excel file
     promptBox.scrollTop = promptBox.scrollHeight; // Scroll to the bottom
   }
 
+  fetch('/page/about.md')
+      .then(response => response.text())
+      .then(markdownText => {
+        const container = document.getElementById('markdown-container');
+        container.innerHTML = marked.parse(markdownText);
+      })
+      .catch(error => {
+        document.getElementById('markdown-container').innerHTML =
+          'Error loading content. Please try again later.';
+      });
 //   function downloadTemplate() {
 //     // Use relative path to access the file from public folder
 //     const templateUrl = '/template/CANMatrix_Demo.xlsx';
