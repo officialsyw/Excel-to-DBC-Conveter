@@ -175,7 +175,7 @@ let excelFile = null; // excel file
     promptBox.scrollTop = promptBox.scrollHeight; // Scroll to the bottom
   }
 
-  fetch('/page/about.md')
+  fetch('https://fastly.jsdelivr.net/gh/officialsyw/Excel-to-DBC-Conveter@main/public/page/about.md')
       .then(response => response.text())
       .then(markdownText => {
         const container = document.getElementById('markdown-container');
