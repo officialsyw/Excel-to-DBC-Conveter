@@ -668,10 +668,17 @@ function getCommonInfo(DBCFileName, MsgNode) {
   BA_DEF_Content += `BA_DEF_ SG_ "GenSigStartValue" INT 0 10000;${eol}`;
   BA_DEF_Content += `BA_DEF_ SG_ "GenSigEVName" STRING ;${eol}`;
 
+  BA_DEF_Content += `BA_DEF_ SG_ "GenSigUnitText" STRING ;${eol}`;
+  BA_DEF_Content += `BA_DEF_ SG_ "GenSigTimeoutValue" INT 0 1000;${eol}`;
+  BA_DEF_Content += `BA_DEF_ SG_ "GenSigTimeoutMsg" ENUM "No","Yes";${eol}`;
+  BA_DEF_Content += `BA_DEF_ SG_ "GenSigAutoGenDsp" ENUM "No","Yes";${eol}`;
+  BA_DEF_Content += `BA_DEF_ SG_ "GenSigAutoGenSnd" ENUM "No","Yes";${eol}`;
+  BA_DEF_Content += `BA_DEF_ SG_ "GenSigEnvVarType" ENUM "Integer","Float";${eol}`;
+
   // Message attributes
   const msgAttrs = [
     ['GenMsgILSupport', 'ENUM', '"No","Yes"'],
-    ['GenMsgSendType', 'ENUM', '"Cyclic","NotUsed","NotUsed","NotUsed","NotUsed","NotUsed","NotUsed","IfActive","noMsgSendType"'],
+    ['GenMsgSendType', 'ENUM', '"Cyclic", "NotUsed","NotUsed","NotUsed","NotUsed","NotUsed","NotUsed","IfActive","noMsgSendType"'],
     ['GenMsgDelayTime', 'INT', '0', '1000'],
     ['GenMsgStartDelayTime', 'INT', '0', '100000'],
     ['GenMsgFastOnStart', 'INT', '0', '1000000'],
@@ -679,7 +686,14 @@ function getCommonInfo(DBCFileName, MsgNode) {
     ['GenMsgCycleTime', 'INT', '0', '60000'],
     ['GenMsgCycleTimeFast', 'INT', '0', '1000000'],
     ['GenMsgRequestable', 'INT', '0', '1'],
-    ['VFrameFormat', 'ENUM', '"StandardCAN","ExtendedCAN","reserved","J1939PG"']
+    ['VFrameFormat', 'ENUM', '"StandardCAN", "ExtendedCAN","reserved","J1939PG"'],
+
+    ['GenMsgTimeoutTime', 'INT', '0', '1000'],
+    ['GenMsgMinGap', 'INT', '0', '1000'], // need check
+    ['GenMsgAutoGenDsp', 'ENUM', '"No","Yes"'],
+    ['GenMsgAutoGenSnd', 'ENUM', '"No","Yes"'],
+    ['GenMsgEVName', 'STRING'],
+    ['GenMsgAltSetting', 'STRING']
     // ... add other message attributes
   ];
 
