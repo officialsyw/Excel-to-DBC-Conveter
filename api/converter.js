@@ -488,56 +488,113 @@ function sortMsgInfo(CANMsgInfo) {
     }
 
     // BA_SG section (signal attributes)
-    CANMsgInfo.MsgList.forEach(msg => {
-      msg.SigList.forEach(signal => {
-        signal.InitValue = signal.InitValue ?? "0";
-        signal.Factor = signal.Factor ?? "1";
-        signal.Offset = signal.Offset ?? "0";
-
-        const factor = parseFloat(signal.Factor);
-        if (factor === 0) {
-          console.error(`Factor is zero for signal ${signal.Name}`);
-          return;
-        }
-
-        let Ini_Val_Num;
-        if (signal.InitValue.toLowerCase().includes('0x')) {
-          const hex = signal.InitValue.toLowerCase().split('x')[1];
-          if (/^[0-9a-f]+$/i.test(hex)) {
-            Ini_Val_Num = parseInt(hex, 16);
+    CANMsgInfo.MsgList.forEach((msg) => {
+      msg.SigList.forEach((signal) => {
+        try {
+          // 强制类型转换与默认值处理
+          const initValue = String(signal.InitValue ?? '0').trim();
+          const factorStr = String(signal.Factor ?? '').trim();
+          const offsetStr = String(signal.Offset ?? '0').trim();
+    
+          // 必要参数校验
+          if (!factorStr) throw new Error(`Factor为必填项，信号名: ${signal.Name}`);
+          const factor = parseFloat(factorStr);
+          if (isNaN(factor)) throw new Error(`无效的Factor数值: ${factorStr}`);
+          if (factor === 0) throw new Error(`Factor不能为零，信号名: ${signal.Name}`);
+          const offset = parseFloat(offsetStr) || 0;
+    
+          // 数值解析核心逻辑
+          let numericValue;
+          const lowerInit = initValue.toLowerCase();
+          
+          // 增强版十六进制正则（支持负号、0x前缀、纯十六进制字符）
+          if (/^-?(0x)?[0-9a-f]+$/i.test(initValue)) {
+            // 分离符号与数值部分
+            let sign = 1;
+            let processedValue = lowerInit;
+            if (processedValue.startsWith('-')) {
+              sign = -1;
+              processedValue = processedValue.slice(1); // 移除负号
+            }
+    
+            // 提取有效十六进制部分
+            const hexValue = processedValue.startsWith('0x') 
+              ? processedValue.slice(2) 
+              : processedValue;
+    
+            // 执行十六进制转换
+            const unsignedValue = parseInt(hexValue, 16);
+            if (isNaN(unsignedValue)) {
+              throw new Error(`十六进制转换失败: ${hexValue}`);
+            }
+            numericValue = unsignedValue * sign; // 应用符号
           } else {
-            return;
+            // 十进制转换（支持负数、浮点数）
+            numericValue = parseFloat(initValue);
+            if (isNaN(numericValue)) {
+              throw new Error(`无效的数值格式: ${initValue}`);
+            }
           }
-        } else if (/^[0-9a-f]+$/i.test(signal.InitValue)) {
-          Ini_Val_Num = parseInt(signal.InitValue, 16);
-        } else {
-        //   console.error(`Invalid InitValue: ${signal.InitValue}`);
-        //   return;
-        // }
-
-        // // 处理十六进制（0x1A 或 1A）
-        // let hexMatch = signal.InitValue.toLowerCase().match(/^-?0x([0-9a-f]+)$|^-?([0-9a-f]+)$/i);
-        // let Ini_Val_Num;
-        // // 长度检测 Length Check
-        // if (hexMatch) {
-        //   const hex = hexMatch[1] || hexMatch[2];
-        //   if (hex.length > 8) {
-        //     console.error(`Hex value too long: ${signal.InitValue}`);
-        //     return;
-        //   }
-        //   Ini_Val_Num = parseInt(hex, 16);
-        //   if (signal.InitValue.startsWith('-')) Ini_Val_Num *= -1;
-        // } else if (/^-?\d+$/.test(signal.InitValue)) {
-        //   Ini_Val_Num = parseInt(signal.InitValue, 10);
-        // } else {
-          console.error(`Invalid InitValue: ${signal.InitValue}`);
-          return;
+    
+          // 计算结果并生成输出
+          const IV = (numericValue - offset) / factor;
+          BA_SG_Content += `BA_ "GenSigStartValue" SG_ ${msg.ID} ${signal.Name} ${IV};${eol}`;
+        } catch (error) {
+          console.error(`[信号处理错误 ${signal.Name}]: ${error.message}`);
         }
-
-        const IV = (Ini_Val_Num - parseFloat(signal.Offset)) / parseFloat(signal.Factor);
-        BA_SG_Content += `BA_ "GenSigStartValue" SG_ ${msg.ID} ${signal.Name} ${IV};${eol}`;
       });
     });
+    
+    // CANMsgInfo.MsgList.forEach(msg => {
+    //   msg.SigList.forEach(signal => {
+    //     signal.InitValue = signal.InitValue ?? "0";
+    //     signal.Factor = signal.Factor || "1";
+    //     signal.Offset = signal.Offset || "0";
+
+    //     const factor = parseFloat(signal.Factor);
+    //     if (factor === 0) {
+    //       console.error(`Factor is zero for signal ${signal.Name}`);
+    //       return;
+    //     }
+
+    //     let Ini_Val_Num;
+    //     if (signal.InitValue.toLowerCase().includes('0x')) {
+    //       const hex = signal.InitValue.toLowerCase().split('x')[1];
+    //       if (/^[0-9a-f]+$/i.test(hex)) {
+    //         Ini_Val_Num = parseInt(hex, 16);
+    //       } else {
+    //         return;
+    //       }
+    //     } else if (/^[0-9a-f]+$/i.test(signal.InitValue)) {
+    //       Ini_Val_Num = parseInt(signal.InitValue, 16);
+    //     } else {
+    //     //   console.error(`Invalid InitValue: ${signal.InitValue}`);
+    //     //   return;
+    //     // }
+
+    //     // // 处理十六进制（0x1A 或 1A）
+    //     // let hexMatch = signal.InitValue.toLowerCase().match(/^-?0x([0-9a-f]+)$|^-?([0-9a-f]+)$/i);
+    //     // let Ini_Val_Num;
+    //     // // 长度检测 Length Check
+    //     // if (hexMatch) {
+    //     //   const hex = hexMatch[1] || hexMatch[2];
+    //     //   if (hex.length > 8) {
+    //     //     console.error(`Hex value too long: ${signal.InitValue}`);
+    //     //     return;
+    //     //   }
+    //     //   Ini_Val_Num = parseInt(hex, 16);
+    //     //   if (signal.InitValue.startsWith('-')) Ini_Val_Num *= -1;
+    //     // } else if (/^-?\d+$/.test(signal.InitValue)) {
+    //     //   Ini_Val_Num = parseInt(signal.InitValue, 10);
+    //     // } else {
+    //       console.error(`Invalid InitValue: ${signal.InitValue}`);
+    //       return;
+    //     }
+
+    //     const IV = (Ini_Val_Num - parseFloat(signal.Offset)) / parseFloat(signal.Factor);
+    //     BA_SG_Content += `BA_ "GenSigStartValue" SG_ ${msg.ID} ${signal.Name} ${IV};${eol}`;
+    //   });
+    // });
 
     // VAL section (value descriptions)
     CANMsgInfo.MsgList.forEach(msg => {
@@ -681,7 +738,7 @@ function getCommonInfo(DBCFileName, MsgNode) {
   BA_DEF_Content += `BA_DEF_ SG_ "GenSigSendType" ENUM ${sendTypeEnum};${eol}`;
   BA_DEF_Content += `BA_DEF_ SG_ "GenSigInactiveValue" INT 0 1000000;${eol}`;
   BA_DEF_Content += `BA_DEF_ SG_ "GenSigStartValue" INT 0 10000;${eol}`;
-  BA_DEF_Content += `BA_DEF_ SG_ "GenSigEVName" STRING ;${eol}`;
+  BA_DEF_Content += `BA_DEF_ SG_ "GenSigEVName" STRING;${eol}`;
 
   // BA_DEF_Content += `BA_DEF_ SG_ "GenSigUnitText" STRING ;${eol}`;
   // BA_DEF_Content += `BA_DEF_ SG_ "GenSigTimeoutValue" INT 0 1000;${eol}`;
@@ -693,7 +750,7 @@ function getCommonInfo(DBCFileName, MsgNode) {
   // Message attributes
   const msgAttrs = [
     ['GenMsgILSupport', 'ENUM', '"No","Yes"'],
-    ['GenMsgSendType', 'ENUM', '"Cyclic", "NotUsed","NotUsed","NotUsed","NotUsed","NotUsed","NotUsed","IfActive","noMsgSendType"'],
+    ['GenMsgSendType', 'ENUM', '"Cyclic","NotUsed","NotUsed","NotUsed","NotUsed","NotUsed","NotUsed","IfActive","noMsgSendType"'],
     ['GenMsgDelayTime', 'INT', '0', '1000'],
     ['GenMsgStartDelayTime', 'INT', '0', '100000'],
     ['GenMsgFastOnStart', 'INT', '0', '1000000'],
@@ -701,7 +758,7 @@ function getCommonInfo(DBCFileName, MsgNode) {
     ['GenMsgCycleTime', 'INT', '0', '60000'],
     ['GenMsgCycleTimeFast', 'INT', '0', '1000000'],
     ['GenMsgRequestable', 'INT', '0', '1'],
-    ['VFrameFormat', 'ENUM', '"StandardCAN", "ExtendedCAN","reserved","J1939PG"'],
+    ['VFrameFormat', 'ENUM', '"StandardCAN","ExtendedCAN","reserved","J1939PG"'],
 
     // ... add other message attributes
     // ['GenMsgTimeoutTime', 'INT', '0', '1000'],
