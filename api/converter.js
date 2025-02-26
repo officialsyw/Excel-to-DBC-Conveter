@@ -499,27 +499,42 @@ function sortMsgInfo(CANMsgInfo) {
           console.error(`Factor is zero for signal ${signal.Name}`);
           return;
         }
-        // 处理十六进制（0x1A 或 1A）
-        let hexMatch = signal.InitValue.toLowerCase().match(/^-?0x([0-9a-f]+)$|^-?([0-9a-f]+)$/i);
+
         let Ini_Val_Num;
-        // 长度检测 Length Check
-        if (hexMatch) {
-          const hex = hexMatch[1] || hexMatch[2];
-          if (hex.length > 8) {
-            console.error(`Hex value too long: ${signal.InitValue}`);
+        if (signal.InitValue.toLowerCase().includes('0x')) {
+          const hex = signal.InitValue.toLowerCase().split('x')[1];
+          if (/^[0-9a-f]+$/i.test(hex)) {
+            Ini_Val_Num = parseInt(hex, 16);
+          } else {
             return;
           }
-          Ini_Val_Num = parseInt(hex, 16);
-          if (signal.InitValue.startsWith('-')) Ini_Val_Num *= -1;
-        } else if (/^-?\d+$/.test(signal.InitValue)) {
-          Ini_Val_Num = parseInt(signal.InitValue, 10);
+        } else if (/^[0-9a-f]+$/i.test(signal.InitValue)) {
+          Ini_Val_Num = parseInt(signal.InitValue, 16);
         } else {
+        //   console.error(`Invalid InitValue: ${signal.InitValue}`);
+        //   return;
+        // }
+
+        // // 处理十六进制（0x1A 或 1A）
+        // let hexMatch = signal.InitValue.toLowerCase().match(/^-?0x([0-9a-f]+)$|^-?([0-9a-f]+)$/i);
+        // let Ini_Val_Num;
+        // // 长度检测 Length Check
+        // if (hexMatch) {
+        //   const hex = hexMatch[1] || hexMatch[2];
+        //   if (hex.length > 8) {
+        //     console.error(`Hex value too long: ${signal.InitValue}`);
+        //     return;
+        //   }
+        //   Ini_Val_Num = parseInt(hex, 16);
+        //   if (signal.InitValue.startsWith('-')) Ini_Val_Num *= -1;
+        // } else if (/^-?\d+$/.test(signal.InitValue)) {
+        //   Ini_Val_Num = parseInt(signal.InitValue, 10);
+        // } else {
           console.error(`Invalid InitValue: ${signal.InitValue}`);
           return;
         }
 
-        const offset = parseFloat(signal.Offset);
-        const IV = ((Ini_Val_Num - offset) / factor).toFixed(4);
+        const IV = (Ini_Val_Num - parseFloat(signal.Offset)) / parseFloat(signal.Factor);
         BA_SG_Content += `BA_ "GenSigStartValue" SG_ ${msg.ID} ${signal.Name} ${IV};${eol}`;
       });
     });
@@ -668,12 +683,12 @@ function getCommonInfo(DBCFileName, MsgNode) {
   BA_DEF_Content += `BA_DEF_ SG_ "GenSigStartValue" INT 0 10000;${eol}`;
   BA_DEF_Content += `BA_DEF_ SG_ "GenSigEVName" STRING ;${eol}`;
 
-  BA_DEF_Content += `BA_DEF_ SG_ "GenSigUnitText" STRING ;${eol}`;
-  BA_DEF_Content += `BA_DEF_ SG_ "GenSigTimeoutValue" INT 0 1000;${eol}`;
-  BA_DEF_Content += `BA_DEF_ SG_ "GenSigTimeoutMsg" ENUM "No","Yes";${eol}`;
-  BA_DEF_Content += `BA_DEF_ SG_ "GenSigAutoGenDsp" ENUM "No","Yes";${eol}`;
-  BA_DEF_Content += `BA_DEF_ SG_ "GenSigAutoGenSnd" ENUM "No","Yes";${eol}`;
-  BA_DEF_Content += `BA_DEF_ SG_ "GenSigEnvVarType" ENUM "Integer","Float";${eol}`;
+  // BA_DEF_Content += `BA_DEF_ SG_ "GenSigUnitText" STRING ;${eol}`;
+  // BA_DEF_Content += `BA_DEF_ SG_ "GenSigTimeoutValue" INT 0 1000;${eol}`;
+  // BA_DEF_Content += `BA_DEF_ SG_ "GenSigTimeoutMsg" ENUM "No","Yes";${eol}`;
+  // BA_DEF_Content += `BA_DEF_ SG_ "GenSigAutoGenDsp" ENUM "No","Yes";${eol}`;
+  // BA_DEF_Content += `BA_DEF_ SG_ "GenSigAutoGenSnd" ENUM "No","Yes";${eol}`;
+  // BA_DEF_Content += `BA_DEF_ SG_ "GenSigEnvVarType" ENUM "Integer","Float";${eol}`;
 
   // Message attributes
   const msgAttrs = [
@@ -688,13 +703,14 @@ function getCommonInfo(DBCFileName, MsgNode) {
     ['GenMsgRequestable', 'INT', '0', '1'],
     ['VFrameFormat', 'ENUM', '"StandardCAN", "ExtendedCAN","reserved","J1939PG"'],
 
-    ['GenMsgTimeoutTime', 'INT', '0', '1000'],
-    ['GenMsgMinGap', 'INT', '0', '1000'], // need check
-    ['GenMsgAutoGenDsp', 'ENUM', '"No","Yes"'],
-    ['GenMsgAutoGenSnd', 'ENUM', '"No","Yes"'],
-    ['GenMsgEVName', 'STRING'],
-    ['GenMsgAltSetting', 'STRING']
     // ... add other message attributes
+    // ['GenMsgTimeoutTime', 'INT', '0', '1000'],
+    // ['GenMsgMinGap', 'INT', '0', '1000'], // need check
+    // ['GenMsgAutoGenDsp', 'ENUM', '"No","Yes"'],
+    // ['GenMsgAutoGenSnd', 'ENUM', '"No","Yes"'],
+    // ['GenMsgEVName', 'STRING'],
+    // ['GenMsgAltSetting', 'STRING']
+
   ];
 
   msgAttrs.forEach(([name, type, ...params]) => {
@@ -728,12 +744,12 @@ function getCommonInfo(DBCFileName, MsgNode) {
     ['GenSigInactiveValue', '0'],
     ['GenSigStartValue', '0'],
     ['GenSigEVName', '"Env@Nodename_@Signame"'],
-    ['GenSigUnitText', '""'],
-    ['GenSigTimeoutValue', '0'],
-    ['GenSigTimeoutMsg', '"No"'],
-    ['GenSigAutoGenDsp', '"No"'],
-    ['GenSigAutoGenSnd', '"No"'],
-    ['GenSigEnvVarType', '"Integer"'],
+    // ['GenSigUnitText', '""'],
+    // ['GenSigTimeoutValue', '0'],
+    // ['GenSigTimeoutMsg', '"No"'],
+    // ['GenSigAutoGenDsp', '"No"'],
+    // ['GenSigAutoGenSnd', '"No"'],
+    // ['GenSigEnvVarType', '"Integer"'],
     ['GenMsgILSupport', '"Yes"'],
     // Message defaults (complete list)
     ['GenMsgSendType', '"noMsgSendType"'],
@@ -745,12 +761,12 @@ function getCommonInfo(DBCFileName, MsgNode) {
     ['GenMsgCycleTimeFast', '0'],
     ['GenMsgRequestable', '1'],
     ['VFrameFormat', '"ExtendedCAN"'],
-    ['GenMsgTimeoutTime', '0'],
-    ['GenMsgMinGap', '0'],
-    ['GenMsgAutoGenDsp', '"No"'],
-    ['GenMsgAutoGenSnd', '"No"'],
-    ['GenMsgEVName', '"Env@Nodename_@Msgname"'],
-    ['GenMsgAltSetting', '""']
+    // ['GenMsgTimeoutTime', '0'],
+    // ['GenMsgMinGap', '0'],
+    // ['GenMsgAutoGenDsp', '"No"'],
+    // ['GenMsgAutoGenSnd', '"No"'],
+    // ['GenMsgEVName', '"Env@Nodename_@Msgname"'],
+    // ['GenMsgAltSetting', '""']
     // ... add other defaults
   ];
 
