@@ -120,9 +120,14 @@ app.post('/api/converter', upload.single('file'), async (req, res) => {
       }
     }
 
-    const encodeContentbuffer = iconv.encode(results.content, encodingSelection);
-    results.content = encodeContentbuffer.toString();
-    res.json({ files: results });
+    // const encodeContentbuffer = iconv.encode(results.content, encodingSelection);
+    // results.content = encodeContentbuffer.toString();
+    // res.json({ files: results });
+    const encodedFiles = results.map(file => ({
+      filename: file.filename,
+      content: iconv.encode(file.content, encodingSelection).toString('binary') // Key Change: binary
+    }));
+    res.json({ files: encodedFiles });
   } catch (error) {
     console.error('Conversion error:', error);
     res.status(500).json({ error: 'Conversion failed' });

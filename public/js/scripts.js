@@ -154,8 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Download generated files
       files.forEach(file => {
         const binaryString = file.content;
-
-        const blob = new Blob([binaryString], { type: `text/plain; charset=${encodingSelection}` });
+        const blob = new Blob([new Uint8Array(binaryString.length).map((_, i) => binaryString.charCodeAt(i))], { type: 'text/plain; charset=' + encodingSelection });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
