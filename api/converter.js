@@ -22,7 +22,7 @@ app.post('/api/converter', upload.single('file'), async (req, res) => {
     const selectedWorksheets = JSON.parse(req.body.selectedWorksheets || '[]');
     const generationOption = req.body.generationOption || 'separately';
     const generateValueTable = req.body.generateValueTable === 'true';
-    const encodingSelection = req.body.Encoding || 'utf8';
+    const encodingSelection = req.body.Encoding.toLowerCase() || 'utf8';
 
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
@@ -123,7 +123,7 @@ app.post('/api/converter', upload.single('file'), async (req, res) => {
     const encodeContent = iconv.encode(JSON.stringify(results.content), encodingSelection);
     const decodeDBCContent = iconv.decode(encodeContent, encodingSelection);
     results.content = decodeDBCContent;
-    
+
     res.json({ files: results });
   } catch (error) {
     console.error('Conversion error:', error);

@@ -153,13 +153,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Download generated files
       files.forEach(file => {
-        const tarEncode = Encoding.convert(
-          Encoding.stringToCode(file.content), // 将字符串转换为字节数组
-          encodingSelection, // 目标编码
-          'UTF-8' // 源编码（假设文件内容是UTF-16或Unicode）
-        );
-        const tarContent = new Uint8Array(tarEncode);
-        const blob = new Blob([tarContent], { type: 'text/plain' });
+        const blob = new Blob([file.content], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
