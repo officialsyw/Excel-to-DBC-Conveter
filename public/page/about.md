@@ -7,7 +7,7 @@ This project is built using **HTML**, **CSS**, **JavaScript**, and **Node.js** w
    <img alt="Static Badge" src="https://img.shields.io/badge/HTML-orange?style=flat&logo=html5&logoColor=white&logoSize=auto&color=orange&cacheSeconds=3600">
    <img alt="Static Badge" src="https://img.shields.io/badge/CSS-yellow?style=flat&logo=css&logoColor=white&logoSize=auto&color=brown&cacheSeconds=3600">
    <img alt="Static Badge" src="https://img.shields.io/badge/JavaScript-blue?style=flat&logo=javascript&logoColor=white&logoSize=auto&color=yellow&cacheSeconds=3600">
-</div></br>
+</div>
 
 > Check out [documentation](https://officialsyw.github.io/Excel-to-DBC-Conveter/) for more information.
 

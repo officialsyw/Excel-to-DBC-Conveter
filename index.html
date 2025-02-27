@@ -4,8 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Excel to DBC Tool</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script> -->
+  <script src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> -->
+  <script src="https://jsd.onmicrosoft.cn/npm/marked/marked.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/encoding-japanese@2.0.0/encoding.min.js"></script> -->
+  <script src="https://jsd.onmicrosoft.cn/npm/encoding-japanese@2.0.0/encoding.min.js"></script>
+  
   <script src="/js/scripts.js"></script>
   <link rel="stylesheet" href="/css/styles.css">
 </head>
@@ -49,6 +54,14 @@
           <select id="generationOption">
             <option value="separately">Generate Separately</option>
             <option value="combined">Generate Combinedly</option>
+          </select>
+        </div>
+        <!-- Dropdown for Encoding Option -->
+        <div class="encoding-option-container">
+          <label for="Encoding">Encoding</label>
+          <select id="Encoding">
+            <option value="UTF-8">UTF-8</option>
+            <option value="GB2312">GB2312</option>
           </select>
         </div>
         <!-- Checkbox for Generate Value Table -->

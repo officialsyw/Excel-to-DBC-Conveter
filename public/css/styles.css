@@ -229,6 +229,30 @@ select {
   font-weight: bold;
 }
 
+.encoding-option-container label {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.encoding-option-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.encoding-option-container select {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.encoding-option-container label {
+  font-size: 16px;
+  font-weight: bold;
+}
+
 .value-table-container {
   gap: 10px;
   min-width: 200px;
