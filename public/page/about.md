@@ -82,6 +82,29 @@ Try the live demo on Vercel: [Live Demo](https://dbctool.shenyanwu.top/)
 💡 Tip: For more information on deploying with Vercel, check out their official [documentation](https://vercel.com/docs).
 Happy coding! 😊
 
+---
+
+## 📑 To Do
+
+- 🔧 Develop the Excel to DBC conversion script
+- 📝 Write user documentation
+- 🛠️ Fix known bugs in the script
+- 📦 Package and release the tool version
+- 💻 Optimize the tool's user interface
+- 🗂️ Support more DBC format features (e.g., Signal and Message descriptions)
+- 🌐 Publish and share the tool on GitHub with a user guide
+
+## 🚀 Future Plans
+
+- 📈 Improve tool stability and optimize performance to reduce conversion time
+- 💬 Add community feedback channels and regular updates
+- 🧑‍💻 Support batch processing of multiple files
+- 🛠️ Add more data validation features
+- 🌍 Support internationalization (multi-language support)
+- 🔄 Integrate the tool into existing automation workflows (e.g., CI/CD)
+
+---
+
 ## 🤝 Contributing
 
 Contributions are welcome!

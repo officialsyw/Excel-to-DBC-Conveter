@@ -153,11 +153,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Download generated files
       files.forEach(file => {
-        const tarContent = Encoding.convert(
+        const tarEncode = Encoding.convert(
           Encoding.stringToCode(file.content), // 将字符串转换为字节数组
           encodingSelection, // 目标编码
           'UTF-8' // 源编码（假设文件内容是UTF-16或Unicode）
         );
+        const tarContent = new Uint8Array(tarEncode);
         const blob = new Blob([tarContent], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -221,5 +222,5 @@ fetch('https://jsd.onmicrosoft.cn/gh/officialsyw/Excel-to-DBC-Conveter@main/publ
 //         });
 // }
 function downloadTemplate() {
-  window.open('https://www.dropbox.com/t/hXrX5iAJLEXQajcW', '_blank');
+  window.open('https://www.alipan.com/s/pw1Jiw5gYsb', '_blank');
 }
