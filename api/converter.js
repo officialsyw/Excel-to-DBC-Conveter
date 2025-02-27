@@ -121,7 +121,7 @@ app.post('/api/converter', upload.single('file'), async (req, res) => {
     }
 
     const encodeContentbuffer = iconv.encode(results.content, encodingSelection);
-    results.content = encodeContentbuffer.toString('binary');
+    results.content = encodeContentbuffer.toString();
     res.json({ files: results });
   } catch (error) {
     console.error('Conversion error:', error);
