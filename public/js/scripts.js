@@ -153,7 +153,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Download generated files
       files.forEach(file => {
-        const blob = new Blob([file.content], { type: 'text/plain' });
+        const binaryString = file.content;
+        const buffer = new Uint8Array(binaryString.length);
+        for (let i = 0; i < binaryString.length; i++) {
+          buffer[i] = binaryString.charCodeAt(i);
+        }
+        // const blob = new Blob([file.content], { type: 'text/plain' });
+        const blob = new Blob([buffer], { type: `text/plain; charset=${encodingSelection}` });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;

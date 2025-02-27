@@ -120,10 +120,8 @@ app.post('/api/converter', upload.single('file'), async (req, res) => {
       }
     }
 
-    const encodeContent = iconv.encode(JSON.stringify(results.content), encodingSelection);
-    const decodeDBCContent = iconv.decode(encodeContent, encodingSelection);
-    results.content = decodeDBCContent;
-
+    const encodeContentbuffer = iconv.encode(results.content, encodingSelection);
+    results.content = encodeContentbuffer.toString('binary');
     res.json({ files: results });
   } catch (error) {
     console.error('Conversion error:', error);
