@@ -405,8 +405,11 @@ function sortMsgInfo(CANMsgInfo) {
                 console.error(`Signal ${signal.Name} start bit and length exceed bounds`);
                 continue;
               }
-            } else if (signal.ByteOrder.toLowerCase() === 'motorola' ||
-              signal.ByteOrder.toLowerCase() === 'motorola lsb') {
+            } else if (
+              signal.ByteOrder.toLowerCase() === 'motorola' ||
+              signal.ByteOrder.toLowerCase() === 'motorola lsb' ||
+              signal.ByteOrder.toLowerCase() === 'motorola msb'
+            ) {
               const startBit = parseInt(signal.StartBit);
 
               if (startBit < 0 || startBit > 63) {
@@ -415,11 +418,21 @@ function sortMsgInfo(CANMsgInfo) {
               }
 
               // Create Motorola LSB matrix
-              const LSB = Array(8).fill().map((_, i) =>
-                Array(8).fill().map((_, j) => 8 * (i + 1) - (j + 1))
-              );
-              const TransLSB = LSB[0].map((_, i) => LSB.map(row => row[i]));
-              const TransMatrixIdx = TransLSB.flat().indexOf(startBit) + 1 - parseInt(signal.Length);
+              const LSB = Array(8)
+                .fill()
+                .map((_, i) =>
+                  Array(8)
+                    .fill()
+                    .map((_, j) => 8 * (i + 1) - (j + 1))
+                );
+              const TransLSB = LSB[0].map((_, i) => LSB.map((row) => row[i]));
+              let TransMatrixIdx;
+
+              if (signal.ByteOrder.toLowerCase() === 'motorola' || signal.ByteOrder.toLowerCase() === 'motorola msb') {
+                TransMatrixIdx = TransLSB.flat().indexOf(startBit) + 1;
+              } else {
+                TransMatrixIdx = TransLSB.flat().indexOf(startBit) + 1 - parseInt(signal.Length);
+              }
 
               if (TransMatrixIdx < 1 || TransMatrixIdx > 64) {
                 console.error(`Signal ${signal.Name} matrix index out of bounds`);
