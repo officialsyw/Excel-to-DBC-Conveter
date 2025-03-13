@@ -406,9 +406,7 @@ function sortMsgInfo(CANMsgInfo) {
                 continue;
               }
             } else if (
-              signal.ByteOrder.toLowerCase() === 'motorola' ||
-              signal.ByteOrder.toLowerCase() === 'motorola lsb' ||
-              signal.ByteOrder.toLowerCase() === 'motorola msb'
+              signal.ByteOrder.toLowerCase() === 'motorola lsb'
             ) {
               const startBit = parseInt(signal.StartBit);
 
@@ -425,22 +423,25 @@ function sortMsgInfo(CANMsgInfo) {
                     .fill()
                     .map((_, j) => 8 * (i + 1) - (j + 1))
                 );
-              const TransLSB = LSB[0].map((_, i) => LSB.map((row) => row[i]));
-              let TransMatrixIdx;
 
-              if (signal.ByteOrder.toLowerCase() === 'motorola' || signal.ByteOrder.toLowerCase() === 'motorola msb') {
-                TransMatrixIdx = TransLSB.flat().indexOf(startBit) + 1;
-              } else {
-                TransMatrixIdx = TransLSB.flat().indexOf(startBit) + 1 - parseInt(signal.Length);
-              }
+              LSBIdx = LSB.flat().indexOf(startBit) + 1 - parseInt(signal.Length);
 
-              if (TransMatrixIdx < 1 || TransMatrixIdx > 64) {
+              if (LSBIdx < 1 || LSBIdx > 64) {
                 console.error(`Signal ${signal.Name} matrix index out of bounds`);
                 continue;
               }
 
-              StartBitHndl = TransLSB.flat()[TransMatrixIdx - 1];
+              StartBitHndl = LSB.flat()[LSBIdx];
               ByteOrderStr = '0';
+            } else if (signal.ByteOrder.toLowerCase() === 'motorola' ||
+              signal.ByteOrder.toLowerCase() === 'motorola msb') {
+              StartBitHndl = parseInt(signal.StartBit);
+              ByteOrderStr = '0';
+
+              if (StartBitHndl > 63) {
+                console.error(`Signal ${signal.Name} start bit and length exceed bounds`);
+                continue;
+              }
             } else {
               console.error(`Signal ${signal.Name} has unsupported byte order: ${signal.ByteOrder}`);
               continue;
@@ -517,18 +518,18 @@ function sortMsgInfo(CANMsgInfo) {
           const initValue = String(signal.InitValue ?? '0').trim();
           const factorStr = String(signal.Factor ?? '').trim();
           const offsetStr = String(signal.Offset ?? '0').trim();
-    
+
           // 必要参数校验
           if (!factorStr) throw new Error(`Factor为必填项，信号名: ${signal.Name}`);
           const factor = parseFloat(factorStr);
           if (isNaN(factor)) throw new Error(`无效的Factor数值: ${factorStr}`);
           if (factor === 0) throw new Error(`Factor不能为零，信号名: ${signal.Name}`);
           const offset = parseFloat(offsetStr) || 0;
-    
+
           // 数值解析核心逻辑
           let numericValue;
           const lowerInit = initValue.toLowerCase();
-          
+
           // 增强版十六进制正则（支持负号、0x前缀、纯十六进制字符）
           if (/^-?(0x)?[0-9a-f]+$/i.test(initValue)) {
             // 分离符号与数值部分
@@ -538,12 +539,12 @@ function sortMsgInfo(CANMsgInfo) {
               sign = -1;
               processedValue = processedValue.slice(1); // 移除负号
             }
-    
+
             // 提取有效十六进制部分
-            const hexValue = processedValue.startsWith('0x') 
-              ? processedValue.slice(2) 
+            const hexValue = processedValue.startsWith('0x')
+              ? processedValue.slice(2)
               : processedValue;
-    
+
             // 执行十六进制转换
             const unsignedValue = parseInt(hexValue, 16);
             if (isNaN(unsignedValue)) {
@@ -557,7 +558,7 @@ function sortMsgInfo(CANMsgInfo) {
               throw new Error(`无效的数值格式: ${initValue}`);
             }
           }
-    
+
           // 计算结果并生成输出
           const IV = (numericValue - offset) / factor;
           BA_SG_Content += `BA_ "GenSigStartValue" SG_ ${msg.ID} ${signal.Name} ${IV};${eol}`;
@@ -566,7 +567,7 @@ function sortMsgInfo(CANMsgInfo) {
         }
       });
     });
-    
+
     // CANMsgInfo.MsgList.forEach(msg => {
     //   msg.SigList.forEach(signal => {
     //     signal.InitValue = signal.InitValue ?? "0";
