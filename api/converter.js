@@ -502,6 +502,11 @@ function sortMsgInfo(CANMsgInfo) {
       const msg = CANMsgInfo.MsgList[BO_Index];
       const MsgCycleTime = parseInt(msg.CycleTime);
 
+      // Add Standard Frame Support
+      if (msg.ID <= 0x7FF) {
+        BA_BO_Content += `BA_ "VFrameFormat" BO_ ${msg.ID} 0;${eol}`;
+      }
+
       if (msg.SendType.toLowerCase() === 'ifactive') {
         BA_BO_Content += `BA_ "GenMsgSendType" BO_ ${msg.ID} 7;${eol}`;
       } else if (msg.SendType.toLowerCase() === 'cycle' && !isNaN(MsgCycleTime)) {
@@ -760,7 +765,7 @@ function getCommonInfo(DBCFileName, MsgNode) {
     '"IfActive","IfActiveWithRepetition","NoSigSendType"';
   BA_DEF_Content += `BA_DEF_ SG_ "GenSigSendType" ENUM ${sendTypeEnum};${eol}`;
   BA_DEF_Content += `BA_DEF_ SG_ "GenSigInactiveValue" INT 0 1000000;${eol}`;
-  BA_DEF_Content += `BA_DEF_ SG_ "GenSigStartValue" INT 0 10000;${eol}`;
+  BA_DEF_Content += `BA_DEF_ SG_ "GenSigStartValue" INT 0 65535;${eol}`;
   BA_DEF_Content += `BA_DEF_ SG_ "GenSigEVName" STRING;${eol}`;
 
   // BA_DEF_Content += `BA_DEF_ SG_ "GenSigUnitText" STRING ;${eol}`;
