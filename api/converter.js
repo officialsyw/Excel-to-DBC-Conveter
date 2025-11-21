@@ -426,7 +426,7 @@ function sortMsgInfo(CANMsgInfo) {
 
               LSBIdx = LSB.flat().indexOf(startBit) + 1 - parseInt(signal.Length);
 
-              if (LSBIdx < 1 || LSBIdx > 64) {
+              if (LSBIdx < 0 || LSBIdx > 63) {
                 console.error(`Signal ${signal.Name} matrix index out of bounds`);
                 continue;
               }
@@ -877,3 +877,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
